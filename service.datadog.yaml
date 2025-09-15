@@ -1,24 +1,48 @@
-    schema-version: v2.2
-    dd-service: my-unmonitored-cron-job
-    team: e-commerce
-    lifecycle: production
-    application: shopping-app
-    description: important cron job for shopist backend
-    tier: "2"
-    type: web
-    contacts:
-    - type: slack
-    contact: https://datadogincidents.slack.com/archives/XXXXX
-    links:
-    - name: Common Operations
-    type: runbook
-    url: https://datadoghq.atlassian.net/wiki/
-    - name: Disabling Deployments
-    type: runbook
-    url: https://datadoghq.atlassian.net/wiki/
-    tags: []
-    integrations:
-    pagerduty:
-    service-url: https://datadog.pagerduty.com/service-directory/XXXXXXX
-    External Resources (Optional)
-   
+apiVersion: v3
+kind: service
+metadata:
+  name: svc_b_gitops
+  description: Entity used for testing service addition via Github.
+  displayName: svc_b_gitops
+  owner: binoy-test-sre
+  links:
+    - name: Storedog
+      type: repo
+      provider: github
+      url: https://github.com/binoy351/storedog/tree/main/services
+    - name: Storedog Readme
+      type: doc
+      provider: Confluence
+      url: https://github.com/binoy351/storedog/tree/main/services
+    - name: Storedog Runbook
+      type: runbook
+      provider: Github
+      url: https://github.com/binoy351/storedog/tree/main/services
+    - name: Service Dashboard
+      type: dashboard
+      provider: Datadog
+      url: https://app.datadoghq.com
+    - name: Storedog CI/CD
+      type: other
+      provider: Jenkins
+      url: https://jenkins.com
+  contacts:
+    - name: Binoy Thomas
+      type: email
+      contact: binoy.thomas@datadoghq.com
+    - name: Binoy Thomas
+      type: link
+      contact: https://linkedin.com
+    - name: Binoy Thomas
+      type: slack
+      contact: https://slack.com/binoy-thomas
+  additionalOwners:
+    - name: team-sec@abc.com
+      type: Security
+    - name: team-qa@abc.com
+      type: QA
+datadog:
+  codeLocations:
+    - repositoryURL: github.com/binoy351/storedog
+      paths:
+        - https://github.com/binoy351/storedog/tree/main/services/frontend
