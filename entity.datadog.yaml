@@ -1,3 +1,4 @@
+---
 apiVersion: v3
 kind: queue
 metadata:
@@ -22,3 +23,57 @@ integrations:
 spec:
   lifecycle: "production"
   tier: "Tier 1"
+---
+apiVersion: v3
+kind: datastore
+metadata:
+  name: web-store-mongo               
+  displayName: "Store Inventory DB (MongoDB)"   
+  description: Stores order transaction data for Shopist e-commerce
+  owner: shopist            
+  additionalOwners:
+    - name: infra-team
+      type: team
+  links:
+    - name: "DB Runbook"
+      type: runbook
+      url: https://wiki.internal/runbooks/orders-db
+    - name: "Schema Repo"
+      type: repo
+      provider: github
+      url: https://github.com/org/orders-db-schema
+integrations:
+  pagerduty:
+    serviceURL: https://pagerduty.com/services/ORD123  
+spec:
+  lifecycle: "production"              
+  tier: "Tier 1"     
+---
+apiVersion: v3
+kind: frontend
+metadata:
+  name: checkout-webapp
+  displayName: Checkout Web App
+  description: Main frontend experience for the checkout flow in Shopist
+  owner: shopist-frontend
+  additionalOwners:
+    - name: ux-platform-team
+  type: team
+  links:
+    - name: "UX Design Guidelines"
+      type: doc
+      url: https://wiki.internal/checkout-design
+    - name: "Frontend Source Code"
+      type: repo
+      provider: github
+      url: https://github.com/shopist/checkout-webapp
+spec:
+  type: browser
+  lifecycle: production
+  tier: tier1
+  dependsOn:
+    - service:checkout-api
+    - service:payment-service
+  componentOf:
+    - system:shopist-checkout-platform
+---
