@@ -22,7 +22,3 @@ integrations:
 spec:
   lifecycle: "production"
   tier: "Tier 1"
-
-
----
-
