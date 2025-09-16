@@ -1,0 +1,218 @@
+---
+apiVersion: v3
+kind: service
+metadata:
+  name: shopist-support
+  description: |
+    The `shopist-support` service powers the support experience for the Shopist
+    platform. It handles the creation, update, retrieval, and verification of
+    customer support tickets across multiple user channels.
+
+    This service supports:
+
+    - Submitting new support tickets (`POST /support`)
+    - Updating ticket details or status (`POST /update`)
+    - Verifying user eligibility or access (`GET /verify`)
+    - Retrieving existing ticket information (`GET /ticket`)
+
+    The service enforces basic validation and supports user authorization checks
+    to ensure ticket integrity.
+
+  links:
+    - name: Source
+      type: repo
+      provider: github
+      url: https://github.com/DataDog/shopist-serverless
+    - name: Datadog Serverless Setup
+      type: doc
+      url: https://docs.datadoghq.com/serverless/
+    - name: Azure App Services Dashboard
+      type: dashboard
+      url: https://app.datadoghq.com/screen/integration/azure_app_service?fromUser=false&refresh_mode=sliding&tpl_var_app_name=shopist-returns-prod&tpl_var_app_service_plan_resource_group=prod-shopist-serverless-rg&tpl_var_region=eastus&tpl_var_subscription_id=5313fc4b-3b83-4b3a-b8e0-38eed11efc10&from_ts=1754333864008&to_ts=1754337464008&live=true
+    - name: Shopist
+      type: link
+      url: https://shopist.io      
+  owner: shopist
+spec:
+  lifecycle: production
+  tier: tier1
+  languages:
+    - nodejs
+datadog:
+  logs:
+    - name: "Logs"
+      query: "service:shopist-support source:nodejs"
+  events:
+    - name: "Azure Events"
+      query: "source:azure"
+---
+apiVersion: v3
+kind: api
+metadata:
+  name: shopist-support
+  displayName: Shopist Support
+  owner: global-support-engineering
+spec:
+  type: openapi
+  implementedBy:
+    - service:shopist-support
+  interface:
+    definition:
+      info:
+        title: Shopist Support
+      openapi: 3.0.0
+      servers:
+        - url: https://api.shopist.io
+          description: Shopist Support API
+      paths:
+        /support:
+          post:
+            description: |
+              Create a new support request.
+
+              This endpoint accepts a support ticket with user and issue details.
+              Expected payload should be in JSON format. On success, the API returns
+              a ticket ID for tracking.
+            operationId: CreateSupportTicket
+            requestBody:
+              description: Support ticket payload.
+              required: true
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      userId:
+                        type: string
+                        description: ID of the user submitting the ticket.
+                      issue:
+                        type: string
+                        description: Description of the issue being reported.
+                      priority:
+                        type: string
+                        enum: [low, medium, high]
+                        description: Priority level of the support request.
+                    required:
+                      - userId
+                      - issue
+            parameters:
+              - in: query
+                name: userId
+                schema:
+                  type: string
+                  default: "10"
+                required: true
+                description: User Id of the requester
+              - in: query
+                name: issue
+                schema:
+                  type: string
+                  default: "Where am I?"
+                required: true
+                description: Issue being reported
+            responses:
+              "201":
+                description: Support ticket created successfully.
+              "400":
+                description: Malformed request or missing parameters.
+              "500":
+                description: Internal server error.
+            tags:
+              - Support
+        /update:
+          post:
+            description: |
+              Update an existing support ticket.
+
+              Requires a valid ticket ID and updated fields such as status or notes.
+            operationId: UpdateSupportTicket
+            requestBody:
+              description: Ticket update payload.
+              required: true
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      ticketId:
+                        type: string
+                        description: ID of the ticket to update.
+                      status:
+                        type: string
+                        description: New status (e.g., open, resolved, closed).
+                      notes:
+                        type: string
+                        description: Optional notes to append to the ticket.
+                    required:
+                      - ticketId
+            parameters:
+              - in: query
+                name: userId
+                schema:
+                  type: string
+                  default: "10"
+                required: true
+                description: ID of the user making the request.
+              - in: query
+                name: ticketId
+                schema:
+                  type: string
+                  default: "10"
+                required: true
+                description: ID of the ticket to update.
+            responses:
+              "200":
+                description: Ticket updated successfully.
+              "400":
+                description: Malformed request or missing parameters.
+              "404":
+                description: Ticket not found.
+              "500":
+                description: Internal server error.
+            tags:
+              - Support
+        /verify:
+          get:
+            description: |
+              Check whether the user is authorized to create or manage support tickets.
+              Accepts query parameters such as user ID or auth token.
+            operationId: VerifySupportAccess
+            parameters:
+              - in: query
+                name: userId
+                schema:
+                  type: string
+                  default: "10"
+                required: true
+                description: ID of the user to verify.
+            responses:
+              "200":
+                description: User is authorized.
+              "403":
+                description: User not authorized.
+              "400":
+                description: Bad request.
+            tags:
+              - Support
+        /ticket:
+          get:
+            description: |
+              Retrieve details for a specific support ticket.
+            operationId: GetSupportTicket
+            parameters:
+              - in: query
+                name: ticketId
+                schema:
+                  type: string
+                  default: "10"
+                required: true
+                description: ID of the ticket to retrieve.
+            responses:
+              "200":
+                description: Ticket found and returned.
+              "404":
+                description: Ticket not found.
+              "400":
+                description: Missing or invalid ticket ID.
+            tags:
+              - Support
