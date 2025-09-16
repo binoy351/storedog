@@ -76,3 +76,38 @@ spec:
     - service:payment-service
   componentOf:
     - system:shopist-checkout-platform
+---
+  apiVersion: v3
+  kind: library
+  metadata:
+    name: my-library
+    displayName: My Library
+    tags:
+      - tag:value
+    links:
+      - name: shopping-cart runbook
+        type: runbook
+        url: https://runbook/shopping-cart
+      - name: shopping-cart architecture
+        provider: gdoc
+        url: https://google.drive/shopping-cart-architecture
+        type: doc
+      - name: shopping-cart Wiki
+        provider: wiki
+        url: https://wiki/shopping-cart
+        type: doc
+      - name: shopping-cart source code
+        provider: github
+        url: http://github/shopping-cart
+        type: repo
+    contacts:
+      - name: Support Email
+        type: email
+        contact: team@shopping.com
+      - name: Support Slack
+        type: slack
+        contact: https://www.slack.com/archives/shopping-cart
+    owner: myteam
+    additionalOwners:
+      - name: opsTeam
+        type: operator
