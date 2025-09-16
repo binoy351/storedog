@@ -84,6 +84,7 @@ spec:
     displayName: My Library
     tags:
       - tag:value
+      - tag1:value1
     links:
       - name: shopping-cart runbook
         type: runbook
