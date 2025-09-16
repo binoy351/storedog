@@ -1,3 +1,4 @@
+---
 apiVersion: v3
 kind: service
 metadata:
@@ -95,4 +96,3 @@ datadog:
     - repositoryURL: github.com/binoy351/storedog
       paths:
         - https://github.com/binoy351/storedog/tree/main/services/frontend
----
