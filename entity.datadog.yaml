@@ -76,4 +76,3 @@ spec:
     - service:payment-service
   componentOf:
     - system:shopist-checkout-platform
----
