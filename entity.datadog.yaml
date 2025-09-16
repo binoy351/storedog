@@ -1,0 +1,28 @@
+apiVersion: v3
+kind: queue
+metadata:
+  name: checkout-events-kafka
+  displayName: "Checkout Events Queue (Kafka)"
+  description: Captures all checkout-related events for downstream processing
+  owner: shopist
+  additionalOwners:
+    - name: platform-team
+      type: team
+  links:
+    - name: "Queue Runbook"
+      type: runbook
+      url: https://wiki.internal/runbooks/checkout-events
+    - name: "Schema Repo"
+      type: repo
+      provider: github
+      url: https://github.com/org/checkout-schema
+integrations:
+  pagerduty:
+    serviceURL: https://pagerduty.com/services/MESSAGING123
+spec:
+  lifecycle: "production"
+  tier: "Tier 1"
+
+
+---
+
