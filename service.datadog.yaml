@@ -51,28 +51,52 @@ datadog:
 ---
 
 apiVersion: v3
-kind: queue
+kind: service
 metadata:
-  name: checkout-events-kafka
-  displayName: "Checkout Events Queue (Kafka)"
-  description: Captures all checkout-related events for downstream processing
-  owner: shopist
-  additionalOwners:
-    - name: platform-team
-      type: team
+  name: svc_b2_gitops
+  description: Entity used for testing service addition via Github.
+  displayName: svc_b2_gitops
+  owner: binoy-test-sre
   links:
-    - name: "Queue Runbook"
-      type: runbook
-      url: https://wiki.internal/runbooks/checkout-events
-    - name: "Schema Repo"
+    - name: Storedog
       type: repo
       provider: github
-      url: https://github.com/org/checkout-schema
-integrations:
-  pagerduty:
-    serviceURL: https://pagerduty.com/services/MESSAGING123
-spec:
-  lifecycle: "production"
-  tier: "Tier 1"
+      url: https://github.com/binoy351/storedog/tree/main/services
+    - name: Storedog Readme
+      type: doc
+      provider: Confluence
+      url: https://github.com/binoy351/storedog/tree/main/services
+    - name: Storedog Runbook
+      type: runbook
+      provider: Github
+      url: https://github.com/binoy351/storedog/tree/main/services
+    - name: Service Dashboard
+      type: dashboard
+      provider: Datadog
+      url: https://app.datadoghq.com
+    - name: Storedog CI/CD
+      type: other
+      provider: Jenkins
+      url: https://jenkins.com
+  contacts:
+    - name: Binoy Thomas
+      type: email
+      contact: binoy.thomas@datadoghq.com
+    - name: Binoy Thomas
+      type: link
+      contact: https://linkedin.com
+    - name: Binoy Thomas
+      type: slack
+      contact: https://slack.com/binoy-thomas
+  additionalOwners:
+    - name: team-sec@abc.com
+      type: Security
+    - name: team-qa@abc.com
+      type: QA
+datadog:
+  codeLocations:
+    - repositoryURL: github.com/binoy351/storedog
+      paths:
+        - https://github.com/binoy351/storedog/tree/main/services/frontend
 
 ---
