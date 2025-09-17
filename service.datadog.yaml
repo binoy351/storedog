@@ -14,7 +14,7 @@ metadata:
     - name: Storedog Readme
       type: doc
       provider: Confluence
-      url: https://github.com/binoy351/storedog/tree/main/services
+      url: https://github.com/binoy351/storedog/tree/main/services-123
     - name: Storedog Runbook
       type: runbook
       provider: Github
